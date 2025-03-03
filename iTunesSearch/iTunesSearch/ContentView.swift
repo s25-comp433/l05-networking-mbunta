@@ -12,9 +12,9 @@
 //  Created by Samuel Shi on 2/27/25.
 //
 
-//asking itunes api to retrieve taylor swift songs-> decoder gives us array of result instances : to do this -> async & await (MUST USE)
+// asking itunes api to retrieve taylor swift songs-> decoder gives us array of result instances : to do this -> async & await (MUST USE)
 
-//async func -> func doing something bts while main app is also working
+// async func -> func doing something bts while main app is also working
 
 import SwiftUI
 
@@ -28,12 +28,11 @@ struct Result: Codable {
     var collectionName: String
 }
 
-
 struct ContentView: View {
     @State private var results = [Result]()
     
     var body: some View {
-        List(results, id:\.trackId) {
+        List(results, id: \.trackId) {
             item in VStack(alignment: .leading) {
                 Text(item.trackName)
                     .font(.headline)
@@ -46,21 +45,21 @@ struct ContentView: View {
         }
     }
         
-        func loadData() async {
-            guard let url = URL(string: "https://itunes.apple.com/search?term=taylor+swift&entity=song") else {
-                print("Invalid URL")
-                return
-            }
-            
-            do {
-                let(data, _) = try await URLSession.shared.data(from: url)
-                if let decodedResponse = try? JSONDecoder().decode(Response.self, from: data) {
-                    results = decodedResponse.results
-                }
-            } catch {
-                print("Invalid data")
-            }
+    func loadData() async {
+        guard let url = URL(string: "https://itunes.apple.com/search?term=taylor+swift&entity=song") else {
+            print("Invalid URL")
+            return
         }
+            
+        do {
+            let (data, _) = try await URLSession.shared.data(from: url)
+            if let decodedResponse = try? JSONDecoder().decode(Response.self, from: data) {
+                results = decodedResponse.results
+            }
+        } catch {
+            print("Invalid data")
+        }
+    }
 }
 
 #Preview {
